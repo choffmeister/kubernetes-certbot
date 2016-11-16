@@ -1,24 +1,17 @@
-FROM debian:8.1
+FROM alpine:3.4
 MAINTAINER Christian Hoffmeister <mail@choffmeister.de>
 
-RUN \
-  apt-get update && \
-  apt-get install ---yes git wget && \
-  apt-get clean && \
-  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+RUN apk add --no-cache --update wget bash certbot ca-certificates
 
 RUN \
-  git clone https://github.com/certbot/certbot /opt/certbot && \
-  ln -s /opt/certbot/letsencrypt-auto /usr/local/bin/letsencrypt-auto && \
-  letsencrypt-auto; exit 0
+  wget https://storage.googleapis.com/kubernetes-release/release/v1.3.0/bin/linux/amd64/kubectl -O /usr/local/bin/kubectl && \
+  chmod +x /usr/local/bin/kubectl
 
-RUN \
-  wget https://storage.googleapis.com/kubernetes-release/release/v1.3.0/bin/linux/amd64/kubectl && \
-  chmod +x kubectl && \
-  mv kubectl /usr/local/bin
+WORKDIR /opt/certbot
 
-WORKDIR /opt/kubernetes-certbot
 COPY run.sh ./run.sh
+COPY wait_and_renew.sh ./wait_and_renew.sh
+COPY renew_certs.sh ./renew_certs.sh
 
 EXPOSE 80
-CMD sleep 86400
+CMD ["./wait_and_renew.sh"]
