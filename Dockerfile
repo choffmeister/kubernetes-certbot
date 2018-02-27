@@ -1,5 +1,4 @@
 FROM debian:8.1
-MAINTAINER Christian Hoffmeister <mail@choffmeister.de>
 
 RUN \
   apt-get update && \
