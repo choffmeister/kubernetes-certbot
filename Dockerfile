@@ -13,7 +13,7 @@ RUN \
   letsencrypt-auto; exit 0
 
 RUN \
-  wget https://storage.googleapis.com/kubernetes-release/release/v1.3.0/bin/linux/amd64/kubectl && \
+  wget https://storage.googleapis.com/kubernetes-release/release/v1.9.3/bin/linux/amd64/kubectl && \
   chmod +x kubectl && \
   mv kubectl /usr/local/bin
 
